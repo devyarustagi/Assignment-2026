@@ -38,11 +38,10 @@ while true; do
     correct=0
     cursor_position=-1
     usr_input=""
-    IFS=
-    while (( cursor_position < length-1 )); do
+    while (( cursor_position < length )); do
         read -s -n 1 -r -d ""
-        if [[ "$REPLY" == $'\x0D' ]]; then
-            REPLY=$'0xa'
+        if [[ "$REPLY" == $'\x0d' ]]; then
+            REPLY=$'\x0a'
         fi
         if [[ "$REPLY" == "!" ]]; then
             break
@@ -74,6 +73,11 @@ while true; do
     done
     time=$SECONDS
     echo
+    input_len=${#usr_input}
+    if (( input_len == 0 )); then
+        echo "No input entered"
+        continue
+    fi
     accuracy=$(echo "scale=2; ($correct*100)/$length" | bc)
     wpm=$(echo "scale=2; ($correct/5)/($time/60)" | bc) 
     echo "Your accuracy is $accuracy% and wpm is $wpm"
