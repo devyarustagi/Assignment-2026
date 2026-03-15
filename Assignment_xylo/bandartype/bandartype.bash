@@ -11,15 +11,36 @@ echo '                        | $$  \ $$| $$  | $$| $$\  $$$| $$  | $$| $$  | $$
 echo '                        | $$$$$$$/| $$  | $$| $$ \  $$| $$$$$$$/| $$  | $$| $$  | $$   | $$       | $$    | $$      | $$$$$$$$'
 echo '                        |_______/ |__/  |__/|__/  \__/|_______/ |__/  |__/|__/  |__/   |__/       |__/    |__/      |________/'
 
-
 echo $normal
+words=0
+while getopts ":w:" flag ; do
+    case "${flag}" in
+        w)
+            if (( OPTARG < 1 || OPTARG > 359 )); then
+                echo "Invalid value $OPTARG: must be between 0 and 360."
+                kill -INT $$
+            fi
+            words=${OPTARG}
+            ;;
+        ?)
+            echo "Invalid flag -$OPTARG. Exiting..." 
+            kill -INT $$
+            ;;
+        :)
+            echo "The flag -$OPTARG requires a number between 0 and 360. Exiting..."
+            kill -INT $$
+            ;;
+    esac
+done
 
 while true; do 
     read -e -n 1 -p "Enter Ctrl+C to exit, or enter any other key to play:"
-    read -e -n 4 -p "Enter the number of words, greater than 0 and less than 360: " words
-    if (( words < 1 || words > 359 )); then
-        echo "Invalid input"
-        continue
+    if (( words == 0 )); then
+        read -e -n 4 -p "Enter the number of words, greater than 0 and less than 360: " words
+        if (( words < 1 || words > 359 )); then
+            echo "Invalid input"
+            continue
+        fi
     fi
     echo -n $blue
     string=$(shuf -n $words ./wordlist.txt)
