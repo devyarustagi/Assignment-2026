@@ -2,26 +2,15 @@
 source ./colors.bash
 #print ASCII Header
 echo -n $orange
-base64 -d <<< 'ICAgICAgICAgICAgICAgICAgICAgICAgIC8kJCQkJCQkICAgLyQkJCQkJCAgLyQkICAgLyQkIC8k
-JCQkJCQkICAgLyQkJCQkJCAgLyQkJCQkJCQgIC8kJCQkJCQkJCAvJCQgICAgIC8kJCAvJCQkJCQk
-JCAgLyQkJCQkJCQkCiAgICAgICAgICAgICAgICAgICAgICAgICB8ICQkX18gICQkIC8kJF9fICAk
-JHwgJCQkIHwgJCR8ICQkX18gICQkIC8kJF9fICAkJHwgJCRfXyAgJCR8X18gICQkX18vfCAgJCQg
-ICAvJCQvfCAkJF9fICAkJHwgJCRfX19fXy8KICAgICAgICAgICAgICAgICAgICAgICAgIHwgJCQg
-IFwgJCR8ICQkICBcICQkfCAkJCQkfCAkJHwgJCQgIFwgJCR8ICQkICBcICQkfCAkJCAgXCAkJCAg
-IHwgJCQgICAgXCAgJCQgLyQkLyB8ICQkICBcICQkfCAkJCAgICAgIAogICAgICAgICAgICAgICAg
-ICAgICAgICAgfCAkJCQkJCQkIHwgJCQkJCQkJCR8ICQkICQkICQkfCAkJCAgfCAkJHwgJCQkJCQk
-JCR8ICQkJCQkJCQvICAgfCAkJCAgICAgXCAgJCQkJC8gIHwgJCQkJCQkJC98ICQkJCQkICAgCiAg
-ICAgICAgICAgICAgICAgICAgICAgICB8ICQkX18gICQkfCAkJF9fICAkJHwgJCQgICQkJCR8ICQk
-ICB8ICQkfCAkJF9fICAkJHwgJCRfXyAgJCQgICB8ICQkICAgICAgXCAgJCQvICAgfCAkJF9fX18v
-IHwgJCRfXy8gICAKICAgICAgICAgICAgICAgICAgICAgICAgIHwgJCQgIFwgJCR8ICQkICB8ICQk
-fCAkJFwgICQkJHwgJCQgIHwgJCR8ICQkICB8ICQkfCAkJCAgXCAkJCAgIHwgJCQgICAgICAgfCAk
-JCAgICB8ICQkICAgICAgfCAkJCAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgfCAkJCQk
-JCQkL3wgJCQgIHwgJCR8ICQkIFwgICQkfCAkJCQkJCQkL3wgJCQgIHwgJCR8ICQkICB8ICQkICAg
-fCAkJCAgICAgICB8ICQkICAgIHwgJCQgICAgICB8ICQkJCQkJCQkCiAgICAgICAgICAgICAgICAg
-ICAgICAgICB8X19fX19fXy8gfF9fLyAgfF9fL3xfXy8gIFxfXy98X19fX19fXy8gfF9fLyAgfF9f
-L3xfXy8gIHxfXy8gICB8X18vICAgICAgIHxfXy8gICAgfF9fLyAgICAgIHxfX19fX19fXy8KICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCg=='
+echo '                         /$$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$  /$$$$$$$$ /$$     /$$ /$$$$$$$  /$$$$$$$$'
+echo '                        | $$__  $$ /$$__  $$| $$$ | $$| $$__  $$ /$$__  $$| $$__  $$|__  $$__/|  $$   /$$/| $$__  $$| $$_____/'
+echo '                        | $$  \ $$| $$  \ $$| $$$$| $$| $$  \ $$| $$  \ $$| $$  \ $$   | $$    \  $$ /$$/ | $$  \ $$| $$      '
+echo '                        | $$$$$$$ | $$$$$$$$| $$ $$ $$| $$  | $$| $$$$$$$$| $$$$$$$/   | $$     \  $$$$/  | $$$$$$$/| $$$$$   '
+echo '                        | $$__  $$| $$__  $$| $$  $$$$| $$  | $$| $$__  $$| $$__  $$   | $$      \  $$/   | $$____/ | $$__/   '
+echo '                        | $$  \ $$| $$  | $$| $$\  $$$| $$  | $$| $$  | $$| $$  \ $$   | $$       | $$    | $$      | $$      '
+echo '                        | $$$$$$$/| $$  | $$| $$ \  $$| $$$$$$$/| $$  | $$| $$  | $$   | $$       | $$    | $$      | $$$$$$$$'
+echo '                        |_______/ |__/  |__/|__/  \__/|_______/ |__/  |__/|__/  |__/   |__/       |__/    |__/      |________/'
+
 
 echo $normal
 
