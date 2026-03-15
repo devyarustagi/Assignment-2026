@@ -23,16 +23,24 @@ L3xfXy8gIHxfXy8gICB8X18vICAgICAgIHxfXy8gICAgfF9fLyAgICAgIHxfX19fX19fXy8KICAg
 ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
 ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCg=='
 
-
+echo $normal
 
 while true; do 
     read -e -n 1 -p "Enter Ctrl+C to exit, or enter any other key to play:"
-    echo -n $normal
+    read -e -n 4 -p "Enter the number of words, greater than 20 and less than 360: " words
+    if (( words < 21 || words > 359 )); then
+        echo "Invalid input"
+        continue
+    fi
     echo -n $blue
-    string=$(shuf -n 4 ./wordlist.txt)
-    cat <<< "$string"
-    echo $normal
+    string=$(shuf -n $words ./wordlist.txt)
     length=${#string}
+    mapfile -t text <<< "$string"
+    for (( i=0; i < length; i++ )); do
+        echo -n "${text[${i}]} "
+    done
+    echo $normal
+
     read -p "Press ENTER to start the test. Type ! when you are done typing:"
     SECONDS=0
     correct=0
