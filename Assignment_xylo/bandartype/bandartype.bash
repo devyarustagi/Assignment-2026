@@ -1,61 +1,86 @@
 #!/bin/bash
 source ./colors.bash
 #print ASCII Header
+#echo centered, argument is string
+echoc(){
+    local columns=$(tput cols)
+    local len=${#2}
+    if (( len >= columns ));then
+        if [[ "$1" == "-n" ]]; then
+            echo -n "$2"
+        else
+            echo "$2"
+        fi
+    else
+        for (( i=1; i<= columns/2 - len/2; i++ )); do
+            echo -n " "
+        done
+        if [[ "$1" == "-n" ]]; then
+            echo -n "$2"
+        else
+            echo "$2"
+        fi
+    fi
+}
 echo -n $orange
-echo '                         /$$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$  /$$$$$$$$ /$$     /$$ /$$$$$$$  /$$$$$$$$'
-echo '                        | $$__  $$ /$$__  $$| $$$ | $$| $$__  $$ /$$__  $$| $$__  $$|__  $$__/|  $$   /$$/| $$__  $$| $$_____/'
-echo '                        | $$  \ $$| $$  \ $$| $$$$| $$| $$  \ $$| $$  \ $$| $$  \ $$   | $$    \  $$ /$$/ | $$  \ $$| $$      '
-echo '                        | $$$$$$$ | $$$$$$$$| $$ $$ $$| $$  | $$| $$$$$$$$| $$$$$$$/   | $$     \  $$$$/  | $$$$$$$/| $$$$$   '
-echo '                        | $$__  $$| $$__  $$| $$  $$$$| $$  | $$| $$__  $$| $$__  $$   | $$      \  $$/   | $$____/ | $$__/   '
-echo '                        | $$  \ $$| $$  | $$| $$\  $$$| $$  | $$| $$  | $$| $$  \ $$   | $$       | $$    | $$      | $$      '
-echo '                        | $$$$$$$/| $$  | $$| $$ \  $$| $$$$$$$/| $$  | $$| $$  | $$   | $$       | $$    | $$      | $$$$$$$$'
-echo '                        |_______/ |__/  |__/|__/  \__/|_______/ |__/  |__/|__/  |__/   |__/       |__/    |__/      |________/'
+echoc -N '/$$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$  /$$$$$$$$ /$$     /$$ /$$$$$$$  /$$$$$$$$'
+echoc -N '| $$__  $$ /$$__  $$| $$$ | $$| $$__  $$ /$$__  $$| $$__  $$|__  $$__/|  $$   /$$/| $$__  $$| $$_____/'
+echoc -N '| $$  \ $$| $$  \ $$| $$$$| $$| $$  \ $$| $$  \ $$| $$  \ $$   | $$    \  $$ /$$/ | $$  \ $$| $$      '
+echoc -N '| $$$$$$$ | $$$$$$$$| $$ $$ $$| $$  | $$| $$$$$$$$| $$$$$$$/   | $$     \  $$$$/  | $$$$$$$/| $$$$$   '
+echoc -N '| $$  \ $$| $$  | $$| $$\  $$$| $$  | $$| $$  | $$| $$  \ $$   | $$       | $$    | $$      | $$      '
+echoc -N '| $$$$$$$/| $$  | $$| $$ \  $$| $$$$$$$/| $$  | $$| $$  | $$   | $$       | $$    | $$      | $$$$$$$$'
+echoc -N '|_______/ |__/  |__/|__/  \__/|_______/ |__/  |__/|__/  |__/   |__/       |__/    |__/      |________/'
 
 echo $normal
 words=0
 difficulty=0
+
+
 while getopts ":w:d:" flag ; do
     case "${flag}" in
         w)
             if (( OPTARG < 1 || OPTARG > 359 )); then
-                echo "Invalid value $OPTARG: must be between 0 and 360."
+                echoc -N "Invalid value $OPTARG: must be between 0 and 360."
                 kill -INT $$
             fi
             words=${OPTARG}
             ;;
         d)
             if (( OPTARG > 3 || OPTARG < 0 )); then
-                echo "Invalid value $OPTARG: difficulty must be either of 1(easy), 2(medium) or 3(hard). Exiting..."
+                echoc -N "Invalid value $OPTARG: difficulty must be either of 1(easy), 2(medium) or 3(hard). Exiting..."
                 kill -INT $$
             fi
             difficulty=${OPTARG}
             ;;
         '?')
-            echo "Invalid flag -$OPTARG. Exiting..." 
+            echoc -N "Invalid flag -$OPTARG. Exiting..." 
             kill -INT $$
             ;;
         :)
-            echo "The flag -$OPTARG requires a number between 0 and 360. Exiting..."
+            echoc -N "The flag -$OPTARG requires a number between 0 and 360. Exiting..."
             kill -INT $$
             ;;
     esac
 done
 
 while true; do 
-    read -e -n 1 -p "Enter Ctrl+C to exit, or enter any other key to play:"
+    echoc -n "Enter Ctrl+C to exit, or enter any other key to play:"
+    read -e -n 1 
     if (( words == 0 )); then
-        read -e -n 4 -p "Enter the number of words, greater than 0 and less than 360: " words
+        echoc -n "Enter the number of words, greater than 0 and less than 360: "
+        read -e -n 4 words
         if (( words < 1 || words > 359 )); then
-            echo "Invalid input"
+            echoc -N "Invalid input"
             words=0
             difficulty=0
             continue
         fi
     fi
     if (( difficulty == 0 )); then
-        read -e -n 1 -p "Enter the difficulty you want: 1(easy), 2(medium) or 3(hard): " difficulty
+        echoc -n "Enter the difficulty you want: 1(easy), 2(medium) or 3(hard): "
+        read -e -n 1 difficulty
         if (( difficulty < 1 || difficulty > 3 )); then
-            echo "Invalid input"
+            echoc -N "Invalid input"
             words=0
             difficulty=0
             continue
@@ -77,7 +102,8 @@ while true; do
     done
     echo $normal
 
-    read -p "Press ENTER to start the test. Type ! when you are done typing:"
+    echoc -n "Press ENTER to start the test. Type ! when you are done typing:"
+    read
     SECONDS=0
     correct=0
     cursor_position=-1
@@ -116,14 +142,14 @@ while true; do
     echo
     input_len=${#usr_input}
     if (( input_len == 0 )); then
-        echo "No input entered"
+        echoc -N "No input entered"
         words=0
         difficulty=0
         continue
     fi
     accuracy=$(echo "scale=2; ($correct*100)/$length" | bc)
     wpm=$(echo "scale=2; ($correct/5)/($time/60)" | bc) 
-    echo "Your accuracy is $accuracy% and wpm is $wpm"
+    echoc -N "Your accuracy is $accuracy% and wpm is $wpm"
     words=0
     difficulty=0
 done
