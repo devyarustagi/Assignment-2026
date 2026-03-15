@@ -1,7 +1,7 @@
 #!/bin/bash
-source colors.bash
+source ./colors.bash
 #print ASCII Header
-echo -n $green
+echo -n $orange
 base64 -d <<< 'ICAgICAgICAgICAgICAgICAgICAgICAgIC8kJCQkJCQkICAgLyQkJCQkJCAgLyQkICAgLyQkIC8k
 JCQkJCQkICAgLyQkJCQkJCAgLyQkJCQkJCQgIC8kJCQkJCQkJCAvJCQgICAgIC8kJCAvJCQkJCQk
 JCAgLyQkJCQkJCQkCiAgICAgICAgICAgICAgICAgICAgICAgICB8ICQkX18gICQkIC8kJF9fICAk
@@ -26,30 +26,54 @@ ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCg=='
 
 
 while true; do 
-    read -e -n 1 -p "Enter q to exit, or enter any other key to play:" PLAY
-    if [[ "$PLAY" == "q" ]]; then
-        echo "Exiting..."
-        exit
-    fi
+    read -e -n 1 -p "Enter Ctrl+C to exit, or enter any other key to play:"
     echo -n $normal
     echo -n $blue
-    string=$(shuf -n 4 wordlist.txt)
+    string=$(shuf -n 4 ./wordlist.txt)
     cat <<< "$string"
     echo $normal
-    read -a words <<< "$string"
     length=${#string}
     read -p "Press ENTER to start the test. Type ! when you are done typing:"
     SECONDS=0
-    read -e -d "!" usr_input
-    time=$SECONDS
-    echo
-    inputsize=${#usr_input}
     correct=0
-    for (( i=0; i<$length && i<$inputsize; i++ )); do
-        if [[ "${usr_input:$i:1}" == "${string:$i:1}" ]]; then
-            correct=$((correct+1))
+    cursor_position=-1
+    usr_input=""
+    IFS=
+    while (( cursor_position < length-1 )); do
+        read -s -n 1 -r -d ""
+        if [[ "$REPLY" == $'\x0D' ]]; then
+            REPLY=$'0xa'
+        fi
+        if [[ "$REPLY" == "!" ]]; then
+            break
+        elif [[ "$REPLY" == $'\x7f' && $cursor_position -eq -1 ]]; then
+            continue
+        else 
+            if [[ "$REPLY" != $'\x7f' ]]; then
+                (( cursor_position++ ))
+                usr_input="${usr_input}${REPLY}"
+                if [[ "${usr_input:$cursor_position:1}" == "${string:$cursor_position:1}" ]]; then
+                    (( correct++ ))
+                    echo -n $green
+                    echo -n "$REPLY"
+                    echo -n $normal
+                else 
+                    echo -n $red
+                    echo -n "$REPLY"
+                    echo -n $normal
+                fi
+            else
+                if [[ "${usr_input:$cursor_position:1}" == "${string:$cursor_position:1}" ]]; then
+                    (( correct-- ))
+                fi
+                usr_input="${usr_input:0:cursor_position}"
+                echo -e -n "\b \b"
+                (( cursor_position-- ))
+            fi
         fi
     done
+    time=$SECONDS
+    echo
     accuracy=$(echo "scale=2; ($correct*100)/$length" | bc)
     wpm=$(echo "scale=2; ($correct/5)/($time/60)" | bc) 
     echo "Your accuracy is $accuracy% and wpm is $wpm"
