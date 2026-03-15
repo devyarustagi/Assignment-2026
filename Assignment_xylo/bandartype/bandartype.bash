@@ -27,14 +27,15 @@ echo $normal
 
 while true; do 
     read -e -n 1 -p "Enter Ctrl+C to exit, or enter any other key to play:"
-    read -e -n 4 -p "Enter the number of words, greater than 20 and less than 360: " words
-    if (( words < 21 || words > 359 )); then
+    read -e -n 4 -p "Enter the number of words, greater than 0 and less than 360: " words
+    if (( words < 1 || words > 359 )); then
         echo "Invalid input"
         continue
     fi
     echo -n $blue
     string=$(shuf -n $words ./wordlist.txt)
     length=${#string}
+    string="${string//$'\x0a'/$'\x20'}"
     mapfile -t text <<< "$string"
     for (( i=0; i < length; i++ )); do
         echo -n "${text[${i}]} "
@@ -46,11 +47,8 @@ while true; do
     correct=0
     cursor_position=-1
     usr_input=""
-    while (( cursor_position < length )); do
+    while (( cursor_position < length-1 )); do 
         read -s -n 1 -r -d ""
-        if [[ "$REPLY" == $'\x0d' ]]; then
-            REPLY=$'\x0a'
-        fi
         if [[ "$REPLY" == "!" ]]; then
             break
         elif [[ "$REPLY" == $'\x7f' && $cursor_position -eq -1 ]]; then
