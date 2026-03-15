@@ -13,7 +13,8 @@ echo '                        |_______/ |__/  |__/|__/  \__/|_______/ |__/  |__/
 
 echo $normal
 words=0
-while getopts ":w:" flag ; do
+difficulty=0
+while getopts ":w:d:" flag ; do
     case "${flag}" in
         w)
             if (( OPTARG < 1 || OPTARG > 359 )); then
@@ -22,7 +23,14 @@ while getopts ":w:" flag ; do
             fi
             words=${OPTARG}
             ;;
-        ?)
+        d)
+            if (( OPTARG > 3 || OPTARG < 0 )); then
+                echo "Invalid value $OPTARG: difficulty must be either of 1(easy), 2(medium) or 3(hard). Exiting..."
+                kill -INT $$
+            fi
+            difficulty=${OPTARG}
+            ;;
+        '?')
             echo "Invalid flag -$OPTARG. Exiting..." 
             kill -INT $$
             ;;
@@ -39,11 +47,28 @@ while true; do
         read -e -n 4 -p "Enter the number of words, greater than 0 and less than 360: " words
         if (( words < 1 || words > 359 )); then
             echo "Invalid input"
+            words=0
+            difficulty=0
+            continue
+        fi
+    fi
+    if (( difficulty == 0 )); then
+        read -e -n 1 -p "Enter the difficulty you want: 1(easy), 2(medium) or 3(hard): " difficulty
+        if (( difficulty < 1 || difficulty > 3 )); then
+            echo "Invalid input"
+            words=0
+            difficulty=0
             continue
         fi
     fi
     echo -n $blue
-    string=$(shuf -n $words ./wordlist.txt)
+    if (( difficulty == 1)); then
+        string=$(shuf -n $words ./easy.txt)
+    elif (( difficulty == 2 )); then
+        string=$(shuf -n $words ./medium.txt)
+    else
+        string=$(shuf -n $words ./hard.txt)
+    fi
     length=${#string}
     string="${string//$'\x0a'/$'\x20'}"
     mapfile -t text <<< "$string"
@@ -92,11 +117,15 @@ while true; do
     input_len=${#usr_input}
     if (( input_len == 0 )); then
         echo "No input entered"
+        words=0
+        difficulty=0
         continue
     fi
     accuracy=$(echo "scale=2; ($correct*100)/$length" | bc)
     wpm=$(echo "scale=2; ($correct/5)/($time/60)" | bc) 
     echo "Your accuracy is $accuracy% and wpm is $wpm"
+    words=0
+    difficulty=0
 done
 
 
